@@ -28,6 +28,9 @@ jobs:
         with:
           distribution: 'temurin'
           java-version: '17'
+
+      - name: Setup Android SDK
+        uses: android-actions/setup-android@v2
       
       - name: Setup Flutter
         uses: subosito/flutter-action@v2
@@ -50,6 +53,9 @@ jobs:
           echo "sdk.dir=$ANDROID_SDK_ROOT" > android/local.properties
           echo "flutter.sdk=$FLUTTER_ROOT" >> android/local.properties
           cat android/local.properties
+        env:
+          ANDROID_SDK_ROOT: ${{ env.ANDROID_SDK_ROOT }}
+          FLUTTER_ROOT: ${{ env.FLUTTER_ROOT }}
 
       - name: Grant gradlew permissions
         run: chmod +x android/gradlew
