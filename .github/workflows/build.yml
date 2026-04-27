@@ -39,6 +39,26 @@ jobs:
       - name: Create local.properties
         run: echo "flutter.sdk=$FLUTTER_ROOT" > android/local.properties
       
+      - name: Verify local.properties
+        run: cat android/local.properties
+      
+      - name: Check Java Version
+        run: java -version
+      
+      - name: Download Gradle Wrapper
+        run: |
+          cd android
+          curl -L -o gradlew https://raw.githubusercontent.com/gradle/gradle/v7.6.3/gradlew
+          curl -L -o gradlew.bat https://raw.githubusercontent.com/gradle/gradle/v7.6.3/gradlew.bat
+          curl -L -o gradle/wrapper/gradle-wrapper.jar https://raw.githubusercontent.com/gradle/gradle/v7.6.3/gradle/wrapper/gradle-wrapper.jar
+          chmod +x gradlew
+          cd ..
+      
+      - name: Verify Gradle
+        run: |
+          ls -la android/gradlew || echo "gradlew not found"
+          cat android/local.properties
+      
       - name: Verify Flutter
         run: flutter doctor -v
       
@@ -49,10 +69,10 @@ jobs:
         run: flutter analyze --no-fatal-warnings || true
       
       - name: Build APK
-        run: flutter build apk --release
+        run: flutter build apk --release --verbose
       
       - name: Build App Bundle
-        run: flutter build appbundle --release
+        run: flutter build appbundle --release --verbose
       
       - name: Upload APK
         uses: actions/upload-artifact@v4

@@ -43,15 +43,13 @@ pubspec.lock
 **/pubspec.lock
 
 # Android related
-**/android/**/gradle-wrapper.jar
 **/android/.gradle
 **/android/captures/
-**/android/gradlew
-**/android/gradlew.bat
 **/android/local.properties
 **/android/**/GeneratedPluginRegistrant.java
 **/android/key.properties
 *.jks
+# Note: gradlew and gradle-wrapper.jar are REQUIRED for CI builds
 
 # iOS/XCode related
 **/ios/**/*.mode1v3
