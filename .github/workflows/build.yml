@@ -42,8 +42,14 @@ jobs:
       - name: Check Java Version
         run: java -version
 
-      - name: Verify Flutter
-        run: flutter doctor -v
+      - name: Get Flutter and Android SDK paths
+        id: get_paths
+        run: |
+          FLUTTER_ROOT=$(dirname $(dirname $(which flutter)))
+          echo "flutter_root=$FLUTTER_ROOT" >> $GITHUB_OUTPUT
+          echo "FLUTTER_ROOT=$FLUTTER_ROOT" >> $GITHUB_ENV
+          echo "Flutter: $FLUTTER_ROOT"
+          echo "Android SDK: $ANDROID_SDK_ROOT"
 
       - name: Get Dependencies
         run: flutter pub get
@@ -51,14 +57,8 @@ jobs:
       - name: Create local.properties
         run: |
           echo "sdk.dir=$ANDROID_SDK_ROOT" > android/local.properties
-          echo "flutter.sdk=$FLUTTER_ROOT" >> android/local.properties
+          echo "flutter.sdk=${{ env.FLUTTER_ROOT }}" >> android/local.properties
           cat android/local.properties
-        env:
-          ANDROID_SDK_ROOT: ${{ env.ANDROID_SDK_ROOT }}
-          FLUTTER_ROOT: ${{ env.FLUTTER_ROOT }}
-
-      - name: Grant gradlew permissions
-        run: chmod +x android/gradlew
       
       - name: Analyze Code
         run: flutter analyze --no-fatal-warnings || true
